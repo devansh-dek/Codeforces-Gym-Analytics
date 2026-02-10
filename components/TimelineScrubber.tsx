@@ -28,7 +28,7 @@ export default function TimelineScrubber({ onTimeChange }: TimelineScrubberProps
       }
 
       const delta = timestamp - lastUpdateRef.current;
-      
+
       // Update every 100ms
       if (delta > 100) {
         const newTime = Math.min(
@@ -105,7 +105,7 @@ export default function TimelineScrubber({ onTimeChange }: TimelineScrubberProps
             className="w-full h-3 bg-gray-700 rounded-lg appearance-none cursor-pointer slider"
           />
           {/* Progress fill */}
-          <div 
+          <div
             className="absolute top-0 left-0 h-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg pointer-events-none"
             style={{ width: `${(timeline.currentTime / timeline.maxTime) * 100}%` }}
           />
@@ -174,7 +174,7 @@ export default function TimelineScrubber({ onTimeChange }: TimelineScrubberProps
           z-index: 10;
           box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
         }
-        
+
         .slider::-moz-range-thumb {
           width: 20px;
           height: 20px;

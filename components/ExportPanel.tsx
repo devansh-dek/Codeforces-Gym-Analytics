@@ -41,10 +41,10 @@ export default function ExportPanel({ isOpen, onClose }: ExportPanelProps) {
   const handleCopyOverlay = () => {
     if (currentStandings.length === 0) return;
     const top3 = currentStandings.slice(0, 3);
-    const overlays = top3.map(team => 
+    const overlays = top3.map(team =>
       ExportUtils.generateStreamOverlay(team.rank, team.teamName, team.solved, team.penalty)
     ).join('\n\n');
-    
+
     navigator.clipboard.writeText(overlays);
     setExportStatus('✅ Stream overlays copied to clipboard!');
     setTimeout(() => setExportStatus(''), 3000);

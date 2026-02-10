@@ -34,7 +34,7 @@ export default function TeamDetailPage({ teamId }: TeamDetailPageProps) {
     const timeline: Array<{ problem: string; time: number; attempts: number }> = [];
     const finalSnapshot = contestData.snapshots[contestData.snapshots.length - 1];
     const teamData = finalSnapshot?.standings.find(t => t.teamId === teamId);
-    
+
     if (teamData) {
       Object.values(teamData.problems).forEach(prob => {
         if (prob.solved && prob.solveTime !== undefined) {
@@ -80,7 +80,7 @@ export default function TeamDetailPage({ teamId }: TeamDetailPageProps) {
         >
           ← Back to Dashboard
         </button>
-        
+
         <h1 className="text-4xl font-bold text-white mb-2">{teamInfo.name}</h1>
         <p className="text-gray-400">
           Members: {teamInfo.members.join(', ')}
@@ -93,17 +93,17 @@ export default function TeamDetailPage({ teamId }: TeamDetailPageProps) {
           <div className="text-gray-400 text-sm">Final Rank</div>
           <div className="text-3xl font-bold text-yellow-400">#{teamStats?.rank || '-'}</div>
         </div>
-        
+
         <div className="bg-gray-900 border border-gray-700 rounded-lg p-4">
           <div className="text-gray-400 text-sm">Problems Solved</div>
           <div className="text-3xl font-bold text-green-400">{teamStats?.solved || 0}</div>
         </div>
-        
+
         <div className="bg-gray-900 border border-gray-700 rounded-lg p-4">
           <div className="text-gray-400 text-sm">Total Penalty</div>
           <div className="text-3xl font-bold text-white">{teamStats?.penalty || 0}</div>
         </div>
-        
+
         <div className="bg-gray-900 border border-gray-700 rounded-lg p-4">
           <div className="text-gray-400 text-sm">Total Attempts</div>
           <div className="text-3xl font-bold text-white">
@@ -120,17 +120,17 @@ export default function TeamDetailPage({ teamId }: TeamDetailPageProps) {
           <ResponsiveContainer width="100%" height={300}>
             <LineChart data={rankHistory}>
               <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-              <XAxis 
-                dataKey="time" 
+              <XAxis
+                dataKey="time"
                 stroke="#9CA3AF"
                 label={{ value: 'Time (minutes)', position: 'insideBottom', offset: -5, fill: '#9CA3AF' }}
               />
-              <YAxis 
-                reversed 
+              <YAxis
+                reversed
                 stroke="#9CA3AF"
                 label={{ value: 'Rank', angle: -90, position: 'insideLeft', fill: '#9CA3AF' }}
               />
-              <Tooltip 
+              <Tooltip
                 contentStyle={{ backgroundColor: '#1F2937', border: '1px solid #374151' }}
                 labelStyle={{ color: '#9CA3AF' }}
               />
@@ -145,16 +145,16 @@ export default function TeamDetailPage({ teamId }: TeamDetailPageProps) {
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={solveTimeline}>
               <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-              <XAxis 
-                dataKey="problem" 
+              <XAxis
+                dataKey="problem"
                 stroke="#9CA3AF"
                 label={{ value: 'Problem', position: 'insideBottom', offset: -5, fill: '#9CA3AF' }}
               />
-              <YAxis 
+              <YAxis
                 stroke="#9CA3AF"
                 label={{ value: 'Time (minutes)', angle: -90, position: 'insideLeft', fill: '#9CA3AF' }}
               />
-              <Tooltip 
+              <Tooltip
                 contentStyle={{ backgroundColor: '#1F2937', border: '1px solid #374151' }}
                 labelStyle={{ color: '#9CA3AF' }}
               />

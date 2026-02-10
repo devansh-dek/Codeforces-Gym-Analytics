@@ -30,7 +30,7 @@ export class CodeforcesAPI {
         if (error.response?.data?.status === 'FAILED') {
           throw new Error(error.response.data.comment || 'Contest not found or unavailable');
         }
-        
+
         // Retry for network errors
         if (i === retries - 1) throw error;
         await new Promise(resolve => setTimeout(resolve, 1000 * (i + 1)));

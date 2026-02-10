@@ -25,7 +25,7 @@ export class TimelineEngine {
     this.submissions = [...submissions].sort(
       (a, b) => a.relativeTimeSeconds - b.relativeTimeSeconds
     );
-    
+
     this.problems = standings.problems.map(p => p.index);
     this.contestDuration = standings.contest.durationSeconds;
     this.teams = new Map();
@@ -83,7 +83,7 @@ export class TimelineEngine {
     relevantSubmissions.forEach(submission => {
       const teamId = this.getTeamId(submission.author);
       const team = teamData.get(teamId);
-      
+
       if (!team) return;
 
       const problemIndex = submission.problem.index;
@@ -99,7 +99,7 @@ export class TimelineEngine {
         problemStatus.solveTime = Math.floor(submission.relativeTimeSeconds / 60);
         // ICPC penalty: solve time + 20 minutes per wrong attempt
         problemStatus.penalty = problemStatus.solveTime + (problemStatus.attempts * 20);
-        
+
         team.solved++;
         team.penalty += problemStatus.penalty;
       } else if (
@@ -184,7 +184,7 @@ export class TimelineEngine {
 
         currentStandings.forEach(team => {
           const prevRank = prevRankMap.get(team.teamId);
-          
+
           if (prevRank === undefined) return;
 
           const rankChange = prevRank - team.rank;
@@ -245,7 +245,7 @@ export class TimelineEngine {
 
       // First solve detection
       const submissionsAtTime = this.submissions.filter(
-        sub => sub.relativeTimeSeconds > (t - snapshotInterval) && 
+        sub => sub.relativeTimeSeconds > (t - snapshotInterval) &&
                sub.relativeTimeSeconds <= t &&
                sub.verdict === 'OK'
       );

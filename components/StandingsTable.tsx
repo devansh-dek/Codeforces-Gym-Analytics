@@ -88,7 +88,7 @@ export default function StandingsTable({ standings, highlightTeams = [] }: Stand
             {standings.map((team, index) => {
               const rankChange = getRankChange(team.teamId, team.rank);
               const isHighlighted = highlightTeams.includes(team.teamId);
-              
+
               return (
                 <tr
                   key={team.teamId}

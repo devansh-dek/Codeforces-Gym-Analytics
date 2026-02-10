@@ -115,7 +115,7 @@
    ```bash
    # Ensure build passes locally first
    npm run build
-   
+
    # Then deploy
    vercel deploy
    # or
@@ -175,18 +175,18 @@ When reporting issues, include:
 
 ### What's NOT Supported (Yet)
 
-❌ **Live Contest Updates**: App shows historical data only  
-❌ **Individual Contests**: Designed for team contests  
-❌ **Submission Code**: Can't view code (API limitation)  
-❌ **Multi-Contest Mashups**: Single contest at a time  
-❌ **Mobile Optimization**: Works but not fully optimized  
+❌ **Live Contest Updates**: App shows historical data only
+❌ **Individual Contests**: Designed for team contests
+❌ **Submission Code**: Can't view code (API limitation)
+❌ **Multi-Contest Mashups**: Single contest at a time
+❌ **Mobile Optimization**: Works but not fully optimized
 
 ### Workarounds
 
-**For Live Contests**: Wait until contest ends, then load  
-**For Individuals**: May work but designed for teams  
-**For Code Viewing**: Visit Codeforces directly  
-**For Mashups**: Load contests separately  
+**For Live Contests**: Wait until contest ends, then load
+**For Individuals**: May work but designed for teams
+**For Code Viewing**: Visit Codeforces directly
+**For Mashups**: Load contests separately
 
 ## Performance Tips
 
@@ -227,10 +227,10 @@ If this fails, Codeforces API might be down.
 
 ## ✅ Current Status
 
-**CORS Issues**: ✅ FIXED (using Next.js proxy)  
-**Build Errors**: ✅ FIXED (TypeScript resolved)  
-**API Integration**: ✅ WORKING  
-**All Features**: ✅ FUNCTIONAL  
+**CORS Issues**: ✅ FIXED (using Next.js proxy)
+**Build Errors**: ✅ FIXED (TypeScript resolved)
+**API Integration**: ✅ WORKING
+**All Features**: ✅ FUNCTIONAL
 
 **Last Updated**: February 10, 2026
 

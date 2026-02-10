@@ -16,13 +16,13 @@ export function generateDemoContest(): ContestData {
 
   // Generate realistic snapshots
   const snapshots: ContestSnapshot[] = [];
-  
+
   for (let t = 0; t <= durationSeconds; t += 60) {
     const standings: TeamStanding[] = teams.map((team, index) => {
       const timeProgress = t / durationSeconds;
       const baseSolved = Math.floor(timeProgress * 7 * (1 - index * 0.1));
       const solved = Math.max(0, Math.min(7, baseSolved + Math.floor(Math.random() * 2)));
-      
+
       const problems: Record<string, any> = {};
       for (let i = 0; i < 7; i++) {
         const problemIndex = String.fromCharCode(65 + i);

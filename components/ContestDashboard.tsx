@@ -110,7 +110,7 @@ export default function ContestDashboard() {
       );
 
       setContestData(data);
-      
+
       // Set initial standings
       const initialStandings = engine.computeStandingsAtTime(0);
       setCurrentStandings(initialStandings);
@@ -118,10 +118,10 @@ export default function ContestDashboard() {
       setIsLoading(false);
     } catch (err) {
       console.error('Failed to load contest:', err);
-      const errorMessage = err instanceof Error 
-        ? err.message 
+      const errorMessage = err instanceof Error
+        ? err.message
         : 'Failed to load contest. Please check the contest ID and try again.';
-      
+
       setError(errorMessage);
       setIsLoading(false);
     }
@@ -129,7 +129,7 @@ export default function ContestDashboard() {
 
   const handleTimeChange = (time: number) => {
     if (!timelineEngine) return;
-    
+
     const standings = timelineEngine.computeStandingsAtTime(time);
     setCurrentStandings(standings);
   };
@@ -147,12 +147,12 @@ export default function ContestDashboard() {
       setIsLoading(true);
       const demoData = generateDemoContest();
       setContestData(demoData);
-      
+
       // Set initial standings
       if (demoData.snapshots.length > 0) {
         setCurrentStandings(demoData.snapshots[0].standings);
       }
-      
+
       setIsLoading(false);
     } catch (err) {
       console.error('Failed to load demo:', err);
@@ -252,7 +252,7 @@ export default function ContestDashboard() {
                 <li>• Supports ICPC-style team contests</li>
                 <li>• Works with gym mashups too!</li>
               </ul>
-              
+
               <div className="mt-4">
                 <h4 className="text-white font-semibold mb-2 text-sm">✅ Try these working Contest IDs:</h4>
                 <div className="flex flex-wrap gap-2">
@@ -289,7 +289,7 @@ export default function ContestDashboard() {
             Contest ID: {contestData.contestId} • {contestData.problems.length} Problems
           </p>
         </div>
-        
+
         <div className="flex items-center gap-4">
           <button
             onClick={() => setShowExport(true)}
@@ -297,14 +297,14 @@ export default function ContestDashboard() {
           >
             📤 Export
           </button>
-          
+
           <button
             onClick={() => setShowComparison(true)}
             className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-semibold"
           >
             🔄 Compare Teams
           </button>
-          
+
           <button
             onClick={toggleLivestreamMode}
             className={`px-4 py-2 rounded-lg font-semibold transition-colors ${
@@ -315,7 +315,7 @@ export default function ContestDashboard() {
           >
             {livestreamMode ? '🎥 Livestream Mode ON' : '🎥 Livestream Mode'}
           </button>
-          
+
           <button
             onClick={() => {
               setContestData(null);
@@ -359,21 +359,21 @@ export default function ContestDashboard() {
             {contestData.submissions.filter(s => s.relativeTimeSeconds <= timeline.currentTime).length}
           </div>
         </div>
-        
+
         <div className="bg-gray-900 border border-gray-700 rounded-lg p-4">
           <div className="text-gray-400 text-sm">Teams</div>
           <div className="text-2xl font-bold text-white">
             {Object.keys(contestData.teams).length}
           </div>
         </div>
-        
+
         <div className="bg-gray-900 border border-gray-700 rounded-lg p-4">
           <div className="text-gray-400 text-sm">Key Moments</div>
           <div className="text-2xl font-bold text-white">
             {contestData.moments.filter(m => m.timestamp <= timeline.currentTime).length}
           </div>
         </div>
-        
+
         <div className="bg-gray-900 border border-gray-700 rounded-lg p-4">
           <div className="text-gray-400 text-sm">Progress</div>
           <div className="text-2xl font-bold text-white">

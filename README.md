@@ -61,7 +61,7 @@ A production-grade web application for visualizing, analyzing, and replaying Cod
 
 ### Prerequisites
 
-- Node.js 18+ 
+- Node.js 18+
 - npm or yarn
 
 ### Installation
