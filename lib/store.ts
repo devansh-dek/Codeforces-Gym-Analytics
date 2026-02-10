@@ -43,7 +43,7 @@ export const useAppStore = create<AppState>((set) => ({
       currentTime: 0,
       isPlaying: false,
       playbackSpeed: 1,
-      maxTime: data.durationSeconds,
+      maxTime: data?.durationSeconds || 0,
     },
   }),
   
