@@ -10,7 +10,7 @@ interface TimelineScrubberProps {
 
 export default function TimelineScrubber({ onTimeChange }: TimelineScrubberProps) {
   const { timeline, contestData, setCurrentTime, play, pause } = useAppStore();
-  const animationRef = useRef<number>();
+  const animationRef = useRef<number | undefined>(undefined);
   const lastUpdateRef = useRef<number>(0);
 
   // Auto-play animation
