@@ -3,6 +3,24 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import axios from 'axios';
+import crypto from 'crypto';
+
+function generateApiSig(
+  methodName: string,
+  params: Record<string, string>,
+  apiSecret: string
+): string {
+  const rand = Math.floor(Math.random() * 999999).toString().padStart(6, '0');
+  const sortedParams = Object.keys(params)
+    .sort()
+    .map(key => `${key}=${params[key]}`)
+    .join('&');
+  
+  const toHash = `${rand}/${methodName}?${sortedParams}#${apiSecret}`;
+  const hash = crypto.createHash('sha512').update(toHash).digest('hex');
+  
+  return `${rand}${hash}`;
+}
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
@@ -18,7 +36,32 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const url = `https://codeforces.com/api/contest.status?contestId=${contestId}&from=${from}&count=${count}`;
+    const apiKey = process.env.NEXT_PUBLIC_CF_API_KEY;
+    const apiSecret = process.env.NEXT_PUBLIC_CF_API_SECRET;
+    
+    let url: string;
+    
+    if (apiKey && apiSecret) {
+      // Authenticated request for private mashups
+      const params: Record<string, string> = {
+        contestId,
+        from,
+        count,
+        apiKey,
+        time: Math.floor(Date.now() / 1000).toString(),
+      };
+      
+      const apiSig = generateApiSig('contest.status', params, apiSecret);
+      
+      const queryString = Object.keys(params)
+        .map(key => `${key}=${params[key]}`)
+        .join('&');
+      
+      url = `https://codeforces.com/api/contest.status?${queryString}&apiSig=${apiSig}`;
+    } else {
+      // Unauthenticated request for public contests
+      url = `https://codeforces.com/api/contest.status?contestId=${contestId}&from=${from}&count=${count}`;
+    }
     
     const response = await axios.get(url, {
       timeout: 30000,
@@ -30,8 +73,23 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(response.data);
   } catch (error: any) {
     console.error('Codeforces API Error:', error.message);
+    
+    // Check if it's a Codeforces API error response
+    if (error.response?.data?.status === 'FAILED') {
+      return NextResponse.json(
+        { 
+          status: 'FAILED',
+          comment: error.response.data.comment || 'Codeforces API error'
+        },
+        { status: 400 }
+      );
+    }
+    
     return NextResponse.json(
-      { error: error.message || 'Failed to fetch submissions' },
+      { 
+        status: 'FAILED',
+        comment: error.message || 'Failed to fetch submissions' 
+      },
       { status: error.response?.status || 500 }
     );
   }

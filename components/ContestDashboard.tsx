@@ -251,8 +251,25 @@ export default function ContestDashboard() {
                 <li>• Enter a Codeforces Gym contest ID</li>
                 <li>• Supports ICPC-style team contests</li>
                 <li>• Works with gym mashups too!</li>
-                <li>• Example IDs: 102391, 505970, 104901</li>
               </ul>
+              
+              <div className="mt-4">
+                <h4 className="text-white font-semibold mb-2 text-sm">✅ Try these working Contest IDs:</h4>
+                <div className="flex flex-wrap gap-2">
+                  {['102391', '505970', '104901', '103469'].map(id => (
+                    <button
+                      key={id}
+                      onClick={() => {
+                        setContestInput(id);
+                        loadContest(parseInt(id));
+                      }}
+                      className="px-3 py-1 bg-blue-900 hover:bg-blue-800 text-blue-200 rounded text-sm transition-colors"
+                    >
+                      {id}
+                    </button>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         </div>

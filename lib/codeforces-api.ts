@@ -15,12 +15,23 @@ export class CodeforcesAPI {
           timeout: 30000,
         });
 
+        // Check for Codeforces API errors
+        if (response.data.status === 'FAILED') {
+          throw new Error(response.data.comment || 'API request failed');
+        }
+
         if (response.data.status !== 'OK') {
           throw new Error(response.data.comment || 'API request failed');
         }
 
         return response.data.result;
-      } catch (error) {
+      } catch (error: any) {
+        // Don't retry if it's a Codeforces error (contest not found, etc.)
+        if (error.response?.data?.status === 'FAILED') {
+          throw new Error(error.response.data.comment || 'Contest not found or unavailable');
+        }
+        
+        // Retry for network errors
         if (i === retries - 1) throw error;
         await new Promise(resolve => setTimeout(resolve, 1000 * (i + 1)));
       }
