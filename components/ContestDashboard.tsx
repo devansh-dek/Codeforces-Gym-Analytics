@@ -8,6 +8,8 @@ import TimelineScrubber from '@/components/TimelineScrubber';
 import StandingsTable from '@/components/StandingsTable';
 import MomentsFeed from '@/components/MomentsFeed';
 import ComparisonModal from '@/components/ComparisonModal';
+import ExportPanel from '@/components/ExportPanel';
+import StatisticsPanel from '@/components/StatisticsPanel';
 import { useRouter } from 'next/navigation';
 
 export default function ContestDashboard() {
@@ -29,7 +31,59 @@ export default function ContestDashboard() {
   const [contestInput, setContestInput] = useState('');
   const [timelineEngine, setTimelineEngine] = useState<TimelineEngine | null>(null);
   const [showComparison, setShowComparison] = useState(false);
+  const [showExport, setShowExport] = useState(false);
   const router = useRouter();
+
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      if (!contestData) return;
+
+      // Space: Play/Pause
+      if (e.code === 'Space' && e.target === document.body) {
+        e.preventDefault();
+        timeline.isPlaying ? pause() : play();
+      }
+
+      // Arrow Left: Rewind 30s
+      if (e.code === 'ArrowLeft') {
+        e.preventDefault();
+        const newTime = Math.max(0, timeline.currentTime - 30);
+        setCurrentTime(newTime);
+        handleTimeChange(newTime);
+      }
+
+      // Arrow Right: Forward 30s
+      if (e.code === 'ArrowRight') {
+        e.preventDefault();
+        const newTime = Math.min(timeline.maxTime, timeline.currentTime + 30);
+        setCurrentTime(newTime);
+        handleTimeChange(newTime);
+      }
+
+      // L key: Toggle livestream mode
+      if (e.code === 'KeyL') {
+        e.preventDefault();
+        toggleLivestreamMode();
+      }
+
+      // C key: Open comparison
+      if (e.code === 'KeyC') {
+        e.preventDefault();
+        setShowComparison(true);
+      }
+
+      // E key: Open export
+      if (e.code === 'KeyE') {
+        e.preventDefault();
+        setShowExport(true);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
+  }, [contestData, timeline, pause, play, setCurrentTime, toggleLivestreamMode]);
+
 
   const loadContest = async (contestId: number) => {
     try {
@@ -185,6 +239,13 @@ export default function ContestDashboard() {
         
         <div className="flex items-center gap-4">
           <button
+            onClick={() => setShowExport(true)}
+            className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-semibold"
+          >
+            📤 Export
+          </button>
+          
+          <button
             onClick={() => setShowComparison(true)}
             className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-semibold"
           >
@@ -268,8 +329,42 @@ export default function ContestDashboard() {
         </div>
       </div>
 
+      {/* Statistics Panel */}
+      {!livestreamMode && (
+        <div className="mt-6">
+          <StatisticsPanel />
+        </div>
+      )}
+
       {/* Comparison Modal */}
       <ComparisonModal isOpen={showComparison} onClose={() => setShowComparison(false)} />
+
+      {/* Export Panel */}
+      <ExportPanel isOpen={showExport} onClose={() => setShowExport(false)} />
+
+      {/* Keyboard Shortcuts Helper */}
+      {!livestreamMode && (
+        <div className="mt-6 bg-gray-900 border border-gray-700 rounded-lg p-4">
+          <h3 className="text-white font-semibold mb-2">⌨️ Keyboard Shortcuts</h3>
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-4 text-sm">
+            <div className="text-gray-300">
+              <kbd className="px-2 py-1 bg-gray-700 rounded">Space</kbd> Play/Pause
+            </div>
+            <div className="text-gray-300">
+              <kbd className="px-2 py-1 bg-gray-700 rounded">←→</kbd> Skip 30s
+            </div>
+            <div className="text-gray-300">
+              <kbd className="px-2 py-1 bg-gray-700 rounded">L</kbd> Livestream
+            </div>
+            <div className="text-gray-300">
+              <kbd className="px-2 py-1 bg-gray-700 rounded">C</kbd> Compare
+            </div>
+            <div className="text-gray-300">
+              <kbd className="px-2 py-1 bg-gray-700 rounded">E</kbd> Export
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
