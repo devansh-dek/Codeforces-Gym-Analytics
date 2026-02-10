@@ -1,22 +1,18 @@
 // Codeforces API Client
+// Uses Next.js API routes as proxy to bypass CORS restrictions
 
 import axios from 'axios';
-import crypto from 'crypto';
 import { CodeforcesSubmission, CodeforcesStanding } from '@/types';
 
-const CF_API_BASE = 'https://codeforces.com/api';
-const API_KEY = process.env.NEXT_PUBLIC_CF_API_KEY || '';
-const API_SECRET = process.env.NEXT_PUBLIC_CF_API_SECRET || '';
+// Use relative URLs for API routes (Next.js proxy)
+const API_BASE = '/api/contest';
 
 export class CodeforcesAPI {
   private static async fetchWithRetry<T>(url: string, retries = 3): Promise<T> {
     for (let i = 0; i < retries; i++) {
       try {
         const response = await axios.get(url, {
-          timeout: 10000,
-          headers: {
-            'User-Agent': 'CFGymAnalytics/1.0',
-          },
+          timeout: 30000,
         });
 
         if (response.data.status !== 'OK') {
@@ -33,7 +29,7 @@ export class CodeforcesAPI {
   }
 
   static async getContestSubmissions(contestId: number): Promise<CodeforcesSubmission[]> {
-    const url = `${CF_API_BASE}/contest.status?contestId=${contestId}&from=1&count=100000`;
+    const url = `${API_BASE}/status?contestId=${contestId}&from=1&count=100000`;
     return this.fetchWithRetry<CodeforcesSubmission[]>(url);
   }
 
@@ -42,7 +38,7 @@ export class CodeforcesAPI {
     from: number = 1,
     count: number = 10000
   ): Promise<CodeforcesStanding> {
-    const url = `${CF_API_BASE}/contest.standings?contestId=${contestId}&from=${from}&count=${count}&showUnofficial=false`;
+    const url = `${API_BASE}/standings?contestId=${contestId}&from=${from}&count=${count}&showUnofficial=false`;
     return this.fetchWithRetry<CodeforcesStanding>(url);
   }
 

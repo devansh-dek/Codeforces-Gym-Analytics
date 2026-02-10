@@ -118,7 +118,11 @@ export default function ContestDashboard() {
       setIsLoading(false);
     } catch (err) {
       console.error('Failed to load contest:', err);
-      setError(err instanceof Error ? err.message : 'Failed to load contest');
+      const errorMessage = err instanceof Error 
+        ? err.message 
+        : 'Failed to load contest. Please check the contest ID and try again.';
+      
+      setError(errorMessage);
       setIsLoading(false);
     }
   };
