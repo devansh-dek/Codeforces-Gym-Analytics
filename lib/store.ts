@@ -6,7 +6,7 @@ import { ContestData, TimelineState, TeamStanding } from '@/types';
 interface AppState {
   // Contest data
   contestData: ContestData | null;
-  setContestData: (data: ContestData) => void;
+  setContestData: (data: ContestData | null) => void;
   
   // Timeline state
   timeline: TimelineState;

@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useAppStore } from '@/lib/store';
 import { CodeforcesAPI } from '@/lib/codeforces-api';
 import { TimelineEngine } from '@/lib/timeline-engine';
+import { generateDemoContest } from '@/lib/demo-data';
 import TimelineScrubber from '@/components/TimelineScrubber';
 import StandingsTable from '@/components/StandingsTable';
 import MomentsFeed from '@/components/MomentsFeed';
@@ -20,6 +21,8 @@ export default function ContestDashboard() {
     setCurrentStandings,
     timeline,
     setCurrentTime,
+    play,
+    pause,
     isLoading,
     setIsLoading,
     error,
@@ -135,6 +138,25 @@ export default function ContestDashboard() {
     }
   };
 
+  const handleLoadDemo = () => {
+    try {
+      setIsLoading(true);
+      const demoData = generateDemoContest();
+      setContestData(demoData);
+      
+      // Set initial standings
+      if (demoData.snapshots.length > 0) {
+        setCurrentStandings(demoData.snapshots[0].standings);
+      }
+      
+      setIsLoading(false);
+    } catch (err) {
+      console.error('Failed to load demo:', err);
+      setError('Failed to load demo contest');
+      setIsLoading(false);
+    }
+  };
+
   const handleJumpToMoment = (timestamp: number) => {
     setCurrentTime(timestamp);
     handleTimeChange(timestamp);
@@ -208,6 +230,16 @@ export default function ContestDashboard() {
                 Load Contest
               </button>
             </form>
+
+            <div className="mt-4">
+              <div className="text-center text-gray-400 mb-2">OR</div>
+              <button
+                onClick={handleLoadDemo}
+                className="w-full px-6 py-3 bg-gradient-to-r from-green-600 to-teal-600 hover:from-green-700 hover:to-teal-700 text-white rounded-lg font-bold text-lg transition-colors"
+              >
+                🎮 Try Demo Contest
+              </button>
+            </div>
 
             <div className="mt-6 p-4 bg-gray-800 rounded-lg">
               <h3 className="text-white font-semibold mb-2">📝 How to use:</h3>
