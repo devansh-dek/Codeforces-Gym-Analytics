@@ -7,6 +7,7 @@ import { TimelineEngine } from '@/lib/timeline-engine';
 import TimelineScrubber from '@/components/TimelineScrubber';
 import StandingsTable from '@/components/StandingsTable';
 import MomentsFeed from '@/components/MomentsFeed';
+import ComparisonModal from '@/components/ComparisonModal';
 import { useRouter } from 'next/navigation';
 
 export default function ContestDashboard() {
@@ -27,6 +28,7 @@ export default function ContestDashboard() {
 
   const [contestInput, setContestInput] = useState('');
   const [timelineEngine, setTimelineEngine] = useState<TimelineEngine | null>(null);
+  const [showComparison, setShowComparison] = useState(false);
   const router = useRouter();
 
   const loadContest = async (contestId: number) => {
@@ -183,6 +185,13 @@ export default function ContestDashboard() {
         
         <div className="flex items-center gap-4">
           <button
+            onClick={() => setShowComparison(true)}
+            className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-semibold"
+          >
+            🔄 Compare Teams
+          </button>
+          
+          <button
             onClick={toggleLivestreamMode}
             className={`px-4 py-2 rounded-lg font-semibold transition-colors ${
               livestreamMode
@@ -258,6 +267,9 @@ export default function ContestDashboard() {
           </div>
         </div>
       </div>
+
+      {/* Comparison Modal */}
+      <ComparisonModal isOpen={showComparison} onClose={() => setShowComparison(false)} />
     </div>
   );
 }
